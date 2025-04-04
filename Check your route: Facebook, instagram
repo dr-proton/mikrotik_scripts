@@ -1,0 +1,13 @@
+:local DNSList {"instagram.com";"facebook.com";"youtube.com"}
+:local bgpPeerState [/routing bgp peer get [find name="antifilter network"] state]
+
+if ($bgpPeerState = "established") do={
+    :foreach lstNames in $DNSList do={
+        :local addr [:resolve $lstNames]
+        :local intf ([/ip route check $addr as-value once ]->"interface")
+     
+        :if ($intf != "l2tp-06") do={
+            :log warning ($lstNames . " (". $addr . ") " .$intf ." Bad nexthop!")
+        }
+    }
+}
