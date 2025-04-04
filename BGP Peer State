@@ -1,0 +1,7 @@
+:local bgpPeerState [/routing bgp peer get [find name="antifilter network"] state]
+:local bgpPeerDisabled [/routing bgp peer get [find name="antifilter network"] disabled]
+
+
+if ($bgpPeerState != "established" and $bgpPeerDisabled != true) do={
+    :log warning ("BGP Peer 'antifilter' state: " . $bgpPeerState)
+}
